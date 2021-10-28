@@ -7,10 +7,12 @@ import org.apache.kafka.streams.kstream.{ Consumed, KStream, Produced }
 
 import java.util.concurrent.CountDownLatch
 
-object Main extends App {
+object MainMapSample extends App {
   logger.info("### Starting Map Sample Application ###")
   val stringSerde: Serde[String] = Serdes.String
   val builder: StreamsBuilder    = new StreamsBuilder
+  val sourceTopic                = "lines-topic"
+  val sinkTopic                  = "lines-lower-topic"
 
   val lines: KStream[String, String]       = builder.stream(sourceTopic, Consumed.`with`(stringSerde, stringSerde))
   val transformed: KStream[String, String] = lines.mapValues(value => value.toLowerCase())
